@@ -1,0 +1,57 @@
+import java.util.HashMap; // Импорт класса HashMap из пакета java.util
+
+class Student { // Определение класса Student
+    String name; // Поле для имени студента
+    String surname; // Поле для фамилии студента
+    int age; // Поле для возраста студента
+    double gpa; // Поле для среднего балла студента
+
+    public Student(String name, String surname, int age, double gpa) { // Конструктор класса Student
+        this.name = name; // Инициализация поля name значением параметра name
+        this.surname = surname; // Инициализация поля surname значением параметра surnameа
+        this.age = age; // Инициализация поля age значением параметра age
+        this.gpa = gpa; // Инициализация поля gpa значением параметра gpa
+    }
+
+    @Override // Анонимный метод переопределения toString()
+    public String toString() { // Метод возвращает строковое представление объекта Student
+        return name + " " + surname + ", возраст: " + age + ", средний балл: " + gpa;
+    }
+}
+
+public class StudentHashMap { // Определение класса StudentHashMap
+    private HashMap<String, Student> studentMap; // Поле для хранения HashMap с ключами типа String и значениями типа Student
+
+    public StudentHashMap() { // Конструктор класса StudentHashMap
+        studentMap = new HashMap<>(); // Создание пустого экземпляра HashMap
+    }
+
+    public void addStudent(String recordBookNumber, Student student) { // Метод добавления студента в HashMap
+        studentMap.put(recordBookNumber, student); // Добавление пары ключ-значение в HashMap
+    }
+
+    public Student getStudent(String recordBookNumber) { // Метод получения студента по номеру записи
+        return studentMap.get(recordBookNumber); // Получение значения из HashMap по заданному ключу
+    }
+
+    public void removeStudent(String recordBookNumber) { // Метод удаления студента из HashMap
+        studentMap.remove(recordBookNumber); // Удаление пары ключ-значение из HashMap
+    }
+
+    public static void main(String[] args) { // Главный метод программы
+        StudentHashMap students = new StudentHashMap(); // Создание экземпляра класса StudentHashMap
+
+        // Добавление студентов
+        students.addStudent("12345", new Student("Гарик", "Карапетян", 20, 4.5)); // Добавление студента с номером записи 12345
+        students.addStudent("67890", new Student("Юля", "Архипова", 22, 4.8)); // Добавление студента с номером записи 67890
+
+        // Поиск студента
+        System.out.println(students.getStudent("12345")); // Вывод информации об студенте с номером записи 12345
+
+        // Удаление студента
+        students.removeStudent("67890"); // Удаление студента с номером записи 67890
+
+        // Попытка найти удаленного студента
+        System.out.println(students.getStudent("67890")); // Проверка наличия удаленного студента в HashMap
+    }
+}
