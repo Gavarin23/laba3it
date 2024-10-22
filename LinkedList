@@ -1,0 +1,94 @@
+import java.util.LinkedList;
+
+// Определение класса HashTable с двумя типовыми параметрами K и V
+class HashTable<K, V> {     // хэштейбел класс для определения хэш таблицы 
+    // Внутренний класс для хранения ключей и значений пары
+    private class Entry<K, V> {
+        K key;           // Ключ пары
+        V value;         // Значение пары
+        
+        public Entry(K key, V value) {  // Конструктор для создания новой пары
+            this.key = key;
+            this.value = value;
+        }
+        
+        public K getKey() {             // Геттер для получения ключа
+            return key;            
+        }
+        
+        public V getValue() {           // Геттер для получения значения
+            return value;
+        }
+        
+        public void setValue(V value) {  // Сеттер для установки нового значения
+            this.value = value;
+        }
+    }
+    
+    private LinkedList<Entry<K, V>>[] table;  // Массив списков для хранения пар
+    private int size;                        // Количество элементов в таблице
+    
+    @SuppressWarnings("unchecked")             // Предупреждение о неиспользуемых типах
+    public HashTable(int capacity) {           // Конструктор для создания таблицы заданной емкости
+        table = new LinkedList[capacity];
+        size = 0;
+    }
+    
+    private int hash(K key) {                  // Приватный метод для вычисления индекса хеширования
+        return key.hashCode() % table.length;   // Использует хеш код ключа и модульную операцию
+    }
+    
+    public void put(K key, V value) {           // Метод для добавления пары в таблицу
+        int index = hash(key);                   // Вычисляет индекс для хранения
+        if (table[index] == null) {              // Если список на этом месте пуст
+            table[index] = new LinkedList<>();     // Создаем новый список
+        }
+        
+        for (Entry<K, V> entry : table[index]) {  // Проходим по существующим элементам
+            if (entry.getKey().equals(key)) {       // Если найден ключ, обновляем значение
+                entry.setValue(value);
+                return;
+            }
+        }
+        
+        table[index].add(new Entry<>(key, value)); // Если ключ не найден, добавляем новую пару
+        size++;
+    }
+    
+    public V get(K key) {                       // Метод для получения значения по ключу
+        int index = hash(key);                  // Вычисляет индекс для хранения
+        if (table[index] == null) return null;   // Если список пуст, возвращаем null
+        
+        for (Entry<K, V> entry : table[index]) {  // Проходим по элементам списка
+            if (entry.getKey().equals(key)) {       // Если найден ключ, возвращаем значение
+                return entry.getValue();
+            }
+        }
+        
+        return null;                             // Если ключ не найден, возвращаем null
+    }
+    
+    public void remove(K key) {                 // Метод для удаления пары по ключу
+        int index = hash(key);                  // Вычисляет индекс для хранения
+        if (table[index] == null) return;        // Если список пуст, ничего не делаем
+        
+        for (Entry<K, V> entry : table[index]) {  // Проходим по элементам списка
+            if (entry.getKey().equals(key)) {       // Если найден ключ, удаляем пару
+                table[index].remove(entry);
+                size--;
+                return;
+            }
+        }
+    }
+    
+    public int size() {                          // Геттер для получения текущего размера таблицы
+        return size;
+    }
+    
+    public boolean isEmpty() {                  // Метод для проверки пустоты таблицы
+        return size == 0;
+    }
+}
+ // метод цепочик это если одинаковый хэш то новая запись добавляется в конец массива 
+ // колизия это если у новой записи которую ты добавляешь в массив такой же хэш как и у записи из массива то новая запсиь добавляется в конец массива
+ //  Дженерики - это механизм, который позволяет создавать типы данных, не зависящие от конкретного типа данных.
